@@ -152,6 +152,15 @@ func initLSPClient(ctx context.Context, svr io.ReadWriteCloser, dir DocumentURI,
 	if !ok || !definitionProvider {
 		return nil, fmt.Errorf("server did not provide Definition")
 	}
+	// Check if the server supports the "callHierarchy" method
+	callHierarchyProvider, ok := vs["callHierarchyProvider"].(bool)
+	if !ok || !callHierarchyProvider {
+		return nil, fmt.Errorf("server did not provide CallHierarchy")
+	}
+	implementationProvider, ok := vs["implementationProvider"].(bool)
+	if !ok || !implementationProvider {
+		return nil, fmt.Errorf("server did not provide Implementation")
+	}
 	typeDefinitionProvider, ok := vs["typeDefinitionProvider"].(bool)
 	if !ok || !typeDefinitionProvider {
 		return nil, fmt.Errorf("server did not provide TypeDefinition")

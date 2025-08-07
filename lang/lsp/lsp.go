@@ -18,14 +18,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/cloudwego/abcoder/lang/utils"
+	"github.com/sourcegraph/go-lsp"
 	"math"
 	"os"
 	"path/filepath"
 	"sort"
 	"strings"
-
-	"github.com/cloudwego/abcoder/lang/utils"
-	"github.com/sourcegraph/go-lsp"
 )
 
 // The SymbolKind values are defined at https://microsoft.github.io/language-server-protocol/specification.
@@ -196,6 +195,27 @@ type Token struct {
 
 func (t *Token) String() string {
 	return fmt.Sprintf("%s %s %v %s", t.Text, t.Type, t.Modifiers, t.Location)
+}
+
+type CallHierarchyItem struct {
+	Name           string            `json:"name"`
+	Kind           SymbolKind        `json:"kind"`
+	Tags           []json.RawMessage `json:"tags,omitempty"`
+	Detail         string            `json:"detail,omitempty"`
+	URI            DocumentURI       `json:"uri"`
+	Range          Range             `json:"range"`
+	SelectionRange Range             `json:"selectionRange"`
+	Data           interface{}       `json:"data,omitempty"`
+}
+
+type CallHierarchyIncomingCall struct {
+	From       CallHierarchyItem `json:"from"`
+	FromRanges []Range           `json:"fromRanges"`
+}
+
+type CallHierarchyOutgoingCall struct {
+	To         CallHierarchyItem `json:"to"`
+	FromRanges []Range           `json:"fromRanges"`
 }
 
 type DidOpenTextDocumentParams struct {
@@ -677,4 +697,54 @@ func constructSymbolHierarchy(symbols []*DocumentSymbol) []*DocumentSymbol {
 	}
 
 	return rootSymbols
+}
+
+func (cli *LSPClient) Implementation(ctx context.Context, uri DocumentURI, pos Position) ([]Location, error) {
+	req := lsp.TextDocumentPositionParams{
+		TextDocument: lsp.TextDocumentIdentifier{
+			URI: lsp.DocumentURI(uri),
+		},
+		Position: lsp.Position(pos),
+	}
+	var resp []Location
+	if err := cli.Call(ctx, "textDocument/implementation", req, &resp); err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (cli *LSPClient) PrepareCallHierarchy(ctx context.Context, uri DocumentURI, pos Position) ([]CallHierarchyItem, error) {
+	req := lsp.TextDocumentPositionParams{
+		TextDocument: lsp.TextDocumentIdentifier{
+			URI: lsp.DocumentURI(uri),
+		},
+		Position: lsp.Position(pos),
+	}
+	var resp []CallHierarchyItem
+	if err := cli.Call(ctx, "textDocument/prepareCallHierarchy", req, &resp); err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (cli *LSPClient) IncomingCalls(ctx context.Context, item CallHierarchyItem) ([]CallHierarchyIncomingCall, error) {
+	req := struct {
+		Item CallHierarchyItem `json:"item"`
+	}{Item: item}
+	var resp []CallHierarchyIncomingCall
+	if err := cli.Call(ctx, "callHierarchy/incomingCalls", req, &resp); err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (cli *LSPClient) OutgoingCalls(ctx context.Context, item CallHierarchyItem) ([]CallHierarchyOutgoingCall, error) {
+	req := struct {
+		Item CallHierarchyItem `json:"item"`
+	}{Item: item}
+	var resp []CallHierarchyOutgoingCall
+	if err := cli.Call(ctx, "callHierarchy/outgoingCalls", req, &resp); err != nil {
+		return nil, err
+	}
+	return resp, nil
 }

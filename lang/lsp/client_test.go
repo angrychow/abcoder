@@ -29,7 +29,7 @@ import (
 
 var golangLSP *LSPClient
 var rustLSP *LSPClient
-var rootDir = "../../../testdata"
+var rootDir = "../../testdata"
 
 func testClientInit(t *testing.T) {
 	var err error
@@ -90,7 +90,7 @@ func testClientInit(t *testing.T) {
 func TestGolang(t *testing.T) {
 	testClientInit(t)
 
-	uri := NewURI(rootDir + "/golang/pkg/entity/entity.go")
+	uri := NewURI(rootDir + "/golang/pkg/util.go")
 
 	// documentSymbol
 	t.Run("documentSymbol", func(t *testing.T) {
@@ -113,8 +113,12 @@ func TestGolang(t *testing.T) {
 			URI: uri,
 			Range: Range{
 				Start: Position{
-					Line:      8,
-					Character: 8,
+					Line:      85,
+					Character: 7,
+				},
+				End: Position{ // End Position is not used
+					Line:      85,
+					Character: 7,
 				},
 			},
 		}
@@ -123,6 +127,34 @@ func TestGolang(t *testing.T) {
 			t.Fatalf("Find Reference failed: %v", err)
 		}
 		fmt.Printf("Find Reference: %#v\n", references)
+		loc, err := golangLSP.Implementation(context.Background(), uri, Position{Line: 80, Character: 8})
+		print(loc)
+	})
+
+	t.Run("callHierarchy", func(t *testing.T) {
+		// prepare call hierarchy
+		items, err := golangLSP.PrepareCallHierarchy(context.Background(), uri, Position{Line: 76, Character: 9})
+		if err != nil {
+			t.Fatalf("Prepare Call Hierarchy failed: %v", err)
+		}
+		if len(items) == 0 {
+			t.Fatalf("Prepare Call Hierarchy failed: no items found")
+		}
+		fmt.Printf("Prepare Call Hierarchy: %#v\n", items)
+
+		// incoming calls
+		incoming, err := golangLSP.IncomingCalls(context.Background(), items[0])
+		if err != nil {
+			t.Fatalf("Incoming Calls failed: %v", err)
+		}
+		fmt.Printf("Incoming Calls: %#v\n", incoming)
+
+		// outgoing calls
+		outgoing, err := golangLSP.OutgoingCalls(context.Background(), items[0])
+		if err != nil {
+			t.Fatalf("Outgoing Calls failed: %v", err)
+		}
+		fmt.Printf("Outgoing Calls: %#v\n", outgoing)
 	})
 
 	// semanticTokens

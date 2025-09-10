@@ -21,6 +21,7 @@ import (
 	"go/token"
 	"go/types"
 	"slices"
+	"sync"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -194,4 +195,70 @@ var f func() (*http.Request, error)`,
 			require.Equal(t, tc.expectedIsNamed, isNamed, "isNamed mismatch")
 		})
 	}
+}
+
+func resetGlobals() {
+	// 重置 GOROOT 的 sync.Once 和其缓存的变量
+	gorootOnce = sync.Once{}
+	detectedGoRoot = ""
+	gorootErr = nil
+
+	// 重置包缓存
+	stdlibCache = NewPackageCache()
+}
+
+func Test_isSysPkg(t *testing.T) {
+	// 测试在 `go env GOROOT` 可以成功执行时的行为
+	t.Run("Group: Happy Path - GOROOT is found", func(t *testing.T) {
+		resetGlobals()
+
+		testCases := []struct {
+			name       string
+			importPath string
+			want       bool
+		}{
+			{"standard library package", "fmt", true},
+			{"nested standard library package", "net/http", true},
+			{"third-party package", "github.com/google/uuid", false},
+			{"extended library package", "golang.org/x/sync/errgroup", false},
+			{"local-like package name", "myproject/utils", false},
+			{"non-existent package", "non/existent/package", false},
+			{"root-level package with dot", "gopkg.in/yaml.v2", false},
+		}
+
+		for _, tc := range testCases {
+			t.Run(tc.name, func(t *testing.T) {
+				if got := isSysPkg(tc.importPath); got != tc.want {
+					t.Errorf("isSysPkg(%q) = %v, want %v", tc.importPath, got, tc.want)
+				}
+			})
+		}
+	})
+
+	// 测试在 `go env GOROOT` 执行失败时的行为
+	t.Run("Group: Fallback Path - GOROOT is not found", func(t *testing.T) {
+		resetGlobals()
+
+		// 使用 t.Setenv 临时清空 PATH，使得 "go" 命令无法被找到
+		t.Setenv("PATH", "")
+
+		testCases := []struct {
+			name       string
+			importPath string
+			want       bool
+		}{
+			{"standard library package (fallback)", "fmt", true},
+			{"nested standard library package (fallback)", "os/exec", true},
+			{"third-party package (fallback)", "github.com/google/uuid", false},
+			{"local-like package name (fallback)", "myproject/utils", true}, // 在降级模式下，被错误地判断为 true
+		}
+
+		for _, tc := range testCases {
+			t.Run(tc.name, func(t *testing.T) {
+				if got := isSysPkg(tc.importPath); got != tc.want {
+					t.Errorf("isSysPkg(%q) in fallback mode = %v, want %v", tc.importPath, got, tc.want)
+				}
+			})
+		}
+	})
 }

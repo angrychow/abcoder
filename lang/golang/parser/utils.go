@@ -18,13 +18,17 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"github.com/cloudwego/abcoder/lang/log"
 	"go/ast"
 	"go/types"
 	"io"
 	"os"
+	"os/exec"
 	"path"
+	"path/filepath"
 	"regexp"
 	"strings"
+	"sync"
 
 	"github.com/Knetic/govaluate"
 	. "github.com/cloudwego/abcoder/lang/uniast"
@@ -49,8 +53,97 @@ func (c cache) Visited(val interface{}) bool {
 	return ok
 }
 
+// PackageCache 缓存 importPath 是否是 system package
+type PackageCache struct {
+	lock  sync.RWMutex
+	cache map[string]bool
+}
+
+func NewPackageCache() *PackageCache {
+	return &PackageCache{
+		cache: make(map[string]bool),
+	}
+}
+
+var (
+	gorootOnce     sync.Once
+	detectedGoRoot string
+	gorootErr      error
+)
+
+// getGoRoot 获取 go root 环境变量。
+func getGoRoot() (string, error) {
+	gorootOnce.Do(func() {
+		cmd := exec.Command("go", "env", "GOROOT")
+		var out bytes.Buffer
+		var stderr bytes.Buffer
+		cmd.Stdout = &out
+		cmd.Stderr = &stderr
+		err := cmd.Run()
+		if err != nil {
+			log.Info("'go env GOROOT' failed: %w, stderr: %s; \n `isSysPkg` will downgrade.", err, stderr.String())
+			gorootErr = fmt.Errorf("'go env GOROOT' failed: %w, stderr: %s", err, stderr.String())
+			return
+		}
+
+		gorootPath := strings.TrimSpace(out.String())
+		if gorootPath == "" {
+			log.Info("'go env GOROOT' returns a empty string \n `isSysPkg` will downgrade.")
+			gorootErr = fmt.Errorf("'go env GOROOT' returns a empty string")
+			return
+		}
+		detectedGoRoot = gorootPath
+	})
+	return detectedGoRoot, gorootErr
+}
+
+// IsStandardPackage 检查一个包是否为标准库，并使用内部缓存。
+func (pc *PackageCache) IsStandardPackage(path string) bool {
+
+	goRoot, err := getGoRoot()
+	// 当前环境找不到 go root，退化到最简单判断
+	if err != nil || goRoot == "" {
+		return !strings.Contains(strings.Split(path, "/")[0], ".")
+	}
+
+	pc.lock.RLock()
+	isStd, found := pc.cache[path]
+	pc.lock.RUnlock()
+
+	if found {
+		return isStd
+	}
+
+	pc.lock.Lock()
+	defer pc.lock.Unlock()
+
+	isStd, found = pc.cache[path]
+	if found {
+		return isStd
+	}
+
+	pkgPath := filepath.Join(goRoot, "src", path)
+	stat, err := os.Stat(pkgPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			isStd = false
+		} else {
+			log.Info("IsStandardPackage: failed to get file stat for %s: %v", pkgPath, err)
+			return false
+		}
+	} else {
+		isStd = stat.IsDir()
+	}
+
+	pc.cache[path] = isStd
+
+	return isStd
+}
+
+var stdlibCache = NewPackageCache()
+
 func isSysPkg(importPath string) bool {
-	return !strings.Contains(strings.Split(importPath, "/")[0], ".")
+	return stdlibCache.IsStandardPackage(importPath)
 }
 
 var (

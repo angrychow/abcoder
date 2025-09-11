@@ -19,14 +19,12 @@ import (
 	"bytes"
 	"container/list"
 	"fmt"
-	"github.com/cloudwego/abcoder/lang/log"
 	"go/ast"
+	"go/build"
 	"go/types"
 	"io"
 	"os"
-	"os/exec"
 	"path"
-	"path/filepath"
 	"regexp"
 	"strings"
 	"sync"
@@ -109,55 +107,20 @@ func (pc *PackageCache) Set(key string, value bool) {
 	pc.cache[key] = elem
 }
 
-var (
-	gorootOnce     sync.Once
-	detectedGoRoot string
-	gorootErr      error
-)
-
-// getGoRoot 获取 go root 环境变量。
-func getGoRoot() (string, error) {
-	gorootOnce.Do(func() {
-		cmd := exec.Command("go", "env", "GOROOT")
-		var out bytes.Buffer
-		var stderr bytes.Buffer
-		cmd.Stdout = &out
-		cmd.Stderr = &stderr
-		err := cmd.Run()
-		if err != nil {
-			log.Info("'go env GOROOT' failed: %v, stderr: %s; \n `isSysPkg` will downgrade.", err, stderr.String())
-			gorootErr = fmt.Errorf("'go env GOROOT' failed: %w, stderr: %s", err, stderr.String())
-			return
-		}
-
-		gorootPath := strings.TrimSpace(out.String())
-		if gorootPath == "" {
-			log.Info("'go env GOROOT' returns a empty string \n `isSysPkg` will downgrade.")
-			gorootErr = fmt.Errorf("'go env GOROOT' returns a empty string")
-			return
-		}
-		detectedGoRoot = gorootPath
-	})
-	return detectedGoRoot, gorootErr
-}
-
 // IsStandardPackage 检查一个包是否为标准库，并使用内部缓存。
 func (pc *PackageCache) IsStandardPackage(path string) bool {
 	if isStd, found := pc.Get(path); found {
 		return isStd
 	}
 
-	goRoot, err := getGoRoot()
-	// 当前环境找不到 go root，退化到最简单判断
-	var isStd bool
-	if err != nil || goRoot == "" {
-		isStd = !strings.Contains(strings.Split(path, "/")[0], ".")
-	} else {
-		pkgPath := filepath.Join(goRoot, "src", path)
-		_, err = os.Stat(pkgPath)
-		isStd = !os.IsNotExist(err)
+	pkg, err := build.Import(path, "", build.FindOnly)
+	if err != nil {
+		// Cannot find the package, assume it's not a standard package
+		pc.Set(path, false)
+		return false
 	}
 
+	isStd := pkg.Goroot
 	pc.Set(path, isStd)
 	return isStd
 }

@@ -17,6 +17,7 @@ package parser
 import (
 	"bufio"
 	"bytes"
+	"container/list"
 	"fmt"
 	"github.com/cloudwego/abcoder/lang/log"
 	"go/ast"
@@ -53,16 +54,59 @@ func (c cache) Visited(val interface{}) bool {
 	return ok
 }
 
-// PackageCache 缓存 importPath 是否是 system package
-type PackageCache struct {
-	lock  sync.RWMutex
-	cache map[string]bool
+type cacheEntry struct {
+	key   string
+	value bool
 }
 
-func NewPackageCache() *PackageCache {
+// PackageCache 缓存 importPath 是否是 system package
+type PackageCache struct {
+	lock        sync.Mutex
+	cache       map[string]*list.Element
+	lru         *list.List
+	lruCapacity int
+}
+
+func NewPackageCache(lruCapacity int) *PackageCache {
 	return &PackageCache{
-		cache: make(map[string]bool),
+		cache:       make(map[string]*list.Element),
+		lru:         list.New(),
+		lruCapacity: lruCapacity,
 	}
+}
+
+// Get retrieves a value from the cache.
+func (pc *PackageCache) Get(key string) (bool, bool) {
+	pc.lock.Lock()
+	defer pc.lock.Unlock()
+	if elem, ok := pc.cache[key]; ok {
+		pc.lru.MoveToFront(elem)
+		return elem.Value.(*cacheEntry).value, true
+	}
+	return false, false
+}
+
+// Set adds a value to the cache.
+func (pc *PackageCache) Set(key string, value bool) {
+	pc.lock.Lock()
+	defer pc.lock.Unlock()
+
+	if elem, ok := pc.cache[key]; ok {
+		pc.lru.MoveToFront(elem)
+		elem.Value.(*cacheEntry).value = value
+		return
+	}
+
+	if pc.lru.Len() >= pc.lruCapacity {
+		oldest := pc.lru.Back()
+		if oldest != nil {
+			pc.lru.Remove(oldest)
+			delete(pc.cache, oldest.Value.(*cacheEntry).key)
+		}
+	}
+
+	elem := pc.lru.PushFront(&cacheEntry{key: key, value: value})
+	pc.cache[key] = elem
 }
 
 var (
@@ -81,7 +125,7 @@ func getGoRoot() (string, error) {
 		cmd.Stderr = &stderr
 		err := cmd.Run()
 		if err != nil {
-			log.Info("'go env GOROOT' failed: %w, stderr: %s; \n `isSysPkg` will downgrade.", err, stderr.String())
+			log.Info("'go env GOROOT' failed: %v, stderr: %s; \n `isSysPkg` will downgrade.", err, stderr.String())
 			gorootErr = fmt.Errorf("'go env GOROOT' failed: %w, stderr: %s", err, stderr.String())
 			return
 		}
@@ -99,48 +143,27 @@ func getGoRoot() (string, error) {
 
 // IsStandardPackage 检查一个包是否为标准库，并使用内部缓存。
 func (pc *PackageCache) IsStandardPackage(path string) bool {
+	if isStd, found := pc.Get(path); found {
+		return isStd
+	}
 
 	goRoot, err := getGoRoot()
 	// 当前环境找不到 go root，退化到最简单判断
+	var isStd bool
 	if err != nil || goRoot == "" {
-		return !strings.Contains(strings.Split(path, "/")[0], ".")
-	}
-
-	pc.lock.RLock()
-	isStd, found := pc.cache[path]
-	pc.lock.RUnlock()
-
-	if found {
-		return isStd
-	}
-
-	pc.lock.Lock()
-	defer pc.lock.Unlock()
-
-	isStd, found = pc.cache[path]
-	if found {
-		return isStd
-	}
-
-	pkgPath := filepath.Join(goRoot, "src", path)
-	stat, err := os.Stat(pkgPath)
-	if err != nil {
-		if os.IsNotExist(err) {
-			isStd = false
-		} else {
-			log.Info("IsStandardPackage: failed to get file stat for %s: %v", pkgPath, err)
-			return false
-		}
+		isStd = !strings.Contains(strings.Split(path, "/")[0], ".")
 	} else {
-		isStd = stat.IsDir()
+		pkgPath := filepath.Join(goRoot, "src", path)
+		_, err = os.Stat(pkgPath)
+		isStd = !os.IsNotExist(err)
 	}
 
-	pc.cache[path] = isStd
-
+	pc.Set(path, isStd)
 	return isStd
 }
 
-var stdlibCache = NewPackageCache()
+// stdlibCache 缓存 importPath 是否是 system package, 10000 个缓存
+var stdlibCache = NewPackageCache(10000)
 
 func isSysPkg(importPath string) bool {
 	return stdlibCache.IsStandardPackage(importPath)

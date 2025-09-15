@@ -73,8 +73,8 @@ func NewPackageCache(lruCapacity int) *PackageCache {
 	}
 }
 
-// Get retrieves a value from the cache.
-func (pc *PackageCache) Get(key string) (bool, bool) {
+// get retrieves a value from the cache.
+func (pc *PackageCache) get(key string) (bool, bool) {
 	pc.lock.Lock()
 	defer pc.lock.Unlock()
 	if elem, ok := pc.cache[key]; ok {
@@ -84,8 +84,8 @@ func (pc *PackageCache) Get(key string) (bool, bool) {
 	return false, false
 }
 
-// Set adds a value to the cache.
-func (pc *PackageCache) Set(key string, value bool) {
+// set adds a value to the cache.
+func (pc *PackageCache) set(key string, value bool) {
 	pc.lock.Lock()
 	defer pc.lock.Unlock()
 
@@ -109,19 +109,19 @@ func (pc *PackageCache) Set(key string, value bool) {
 
 // IsStandardPackage 检查一个包是否为标准库，并使用内部缓存。
 func (pc *PackageCache) IsStandardPackage(path string) bool {
-	if isStd, found := pc.Get(path); found {
+	if isStd, found := pc.get(path); found {
 		return isStd
 	}
 
 	pkg, err := build.Import(path, "", build.FindOnly)
 	if err != nil {
 		// Cannot find the package, assume it's not a standard package
-		pc.Set(path, false)
+		pc.set(path, false)
 		return false
 	}
 
 	isStd := pkg.Goroot
-	pc.Set(path, isStd)
+	pc.set(path, isStd)
 	return isStd
 }
 

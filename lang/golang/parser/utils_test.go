@@ -273,15 +273,15 @@ func Test_isSysPkg(t *testing.T) {
 		assert.Equal(t, 2, stdlibCache.lru.Len(), "Cache size should remain at capacity")
 
 		// 4. "fmt" 应该在 Cache 中
-		_, foundFmt := stdlibCache.Get("fmt")
+		_, foundFmt := stdlibCache.get("fmt")
 		assert.True(t, foundFmt, "fmt should still be in the cache")
 
 		// 5. "net" 应该在 Cache 中
-		_, foundNet := stdlibCache.Get("net")
+		_, foundNet := stdlibCache.get("net")
 		assert.True(t, foundNet, "net should be in the cache")
 
 		// 6. "os" 不应该在 Cache 中
-		_, foundOs := stdlibCache.Get("os")
+		_, foundOs := stdlibCache.get("os")
 		assert.False(t, foundOs, "os should have been evicted from the cache")
 	})
 }

@@ -19,8 +19,8 @@ package patch
 import (
 	"testing"
 
-	"github.com/cloudwego/abcoder/lang/testutils"
-	"github.com/cloudwego/abcoder/lang/uniast"
+	"github.com/angrychow/abcoder/lang/testutils"
+	"github.com/angrychow/abcoder/lang/uniast"
 )
 
 // Expected to fail because the AST file contains local paths.

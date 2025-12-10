@@ -194,11 +194,11 @@ func (p *GoParser) loadPackages(mod *Module, dir string, pkgPath PkgPath) (err e
 		}
 	next_file:
 		for idx, file := range pkg.Syntax {
-			if idx >= len(pkg.GoFiles) {
+			if idx >= len(pkg.CompiledGoFiles) {
 				fmt.Fprintf(os.Stderr, "skip file %s by loader\n", file.Name)
 				continue
 			}
-			filePath := pkg.GoFiles[idx]
+			filePath := pkg.CompiledGoFiles[idx]
 			for _, exclude := range p.exclues {
 				if exclude.MatchString(filePath) {
 					fmt.Fprintf(os.Stderr, "skip file %s\n", filePath)

@@ -193,7 +193,7 @@ Universal Abstract-Syntax-Tree 是 ABCoder 建立的一种 LLM 亲和、语言�
 
 	- rust 中为 `use xx: : yy;`
 
-	- Golang 中为 `"github.com/cloudwego/abcoder"`
+	- Golang 中为 `"github.com/angrychow/abcoder"`
 
 
 - Alias: 导入别名，可为空

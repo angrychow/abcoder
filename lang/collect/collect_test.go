@@ -21,12 +21,12 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/cloudwego/abcoder/lang/java"
-	javaLsp "github.com/cloudwego/abcoder/lang/java/lsp"
-	"github.com/cloudwego/abcoder/lang/log"
-	"github.com/cloudwego/abcoder/lang/lsp"
-	"github.com/cloudwego/abcoder/lang/testutils"
-	"github.com/cloudwego/abcoder/lang/uniast"
+	"github.com/angrychow/abcoder/lang/java"
+	javaLsp "github.com/angrychow/abcoder/lang/java/lsp"
+	"github.com/angrychow/abcoder/lang/log"
+	"github.com/angrychow/abcoder/lang/lsp"
+	"github.com/angrychow/abcoder/lang/testutils"
+	"github.com/angrychow/abcoder/lang/uniast"
 )
 
 func TestCollector_CollectByTreeSitter_Java(t *testing.T) {

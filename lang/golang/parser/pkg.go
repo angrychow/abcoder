@@ -193,12 +193,16 @@ func (p *GoParser) loadPackages(mod *Module, dir string, pkgPath PkgPath) (err e
 			continue
 		}
 	next_file:
-		for idx, file := range pkg.Syntax {
-			if idx >= len(pkg.GoFiles) {
-				fmt.Fprintf(os.Stderr, "skip file %s by loader\n", file.Name)
+		for _, file := range pkg.Syntax {
+			if file == nil {
 				continue
 			}
-			filePath := pkg.GoFiles[idx]
+			// Get file path from token.FileSet instead of relying on index
+			filePath := fset.Position(file.Pos()).Filename
+			if filePath == "" {
+				fmt.Fprintf(os.Stderr, "skip file with empty path by loader\n")
+				continue
+			}
 			for _, exclude := range p.exclues {
 				if exclude.MatchString(filePath) {
 					fmt.Fprintf(os.Stderr, "skip file %s\n", filePath)

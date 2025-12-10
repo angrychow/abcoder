@@ -172,20 +172,25 @@ func (p *Patcher) Flush() error {
 			}
 		}
 
-		// sort by offset
+		// sort by offset in descending order to avoid position shift issues
 		sort.SliceStable(ns, func(i, j int) bool {
-			return ns[i].StartOffset < ns[j].StartOffset
+			return ns[i].StartOffset > ns[j].StartOffset
 		})
 
-		var offset int
+		// process from back to front so that modifications don't affect earlier positions
 		for _, n := range ns {
 			if n.StartOffset >= len(data) {
+				// if start position exceeds file length, append to end
 				data = append(append(data, '\n'), []byte(n.Codes)...)
 				continue
 			}
-			tmp := append(data[:offset+n.StartOffset:offset+n.StartOffset], []byte(n.Codes)...)
-			data = append(tmp, data[offset+n.EndOffset:]...)
-			offset += (len(n.Codes) - (n.EndOffset - n.StartOffset))
+			if n.EndOffset > len(data) {
+				// if end position exceeds file length, truncate to file end
+				n.EndOffset = len(data)
+			}
+			// perform replacement: [0...StartOffset] + new code + [EndOffset...end]
+			tmp := append(data[:n.StartOffset:n.StartOffset], []byte(n.Codes)...)
+			data = append(tmp, data[n.EndOffset:]...)
 		}
 
 		if err := utils.MustWriteFile(filepath.Join(p.OutDir, fpath), data); err != nil {

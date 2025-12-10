@@ -20,8 +20,8 @@ import (
 	"context"
 	"strings"
 
-	"github.com/cloudwego/abcoder/llm/prompt"
-	"github.com/cloudwego/abcoder/llm/tool"
+	"github.com/angrychow/abcoder/llm/prompt"
+	"github.com/angrychow/abcoder/llm/tool"
 	"github.com/cloudwego/eino/components/model"
 	etool "github.com/cloudwego/eino/components/tool"
 	"github.com/cloudwego/eino/compose"

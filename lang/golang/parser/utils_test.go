@@ -245,7 +245,7 @@ func Test_isSysPkg(t *testing.T) {
 				defer wg.Done()
 				for j := 0; j < numOpsPerGoroutine; j++ {
 					isSysPkg("fmt")
-					isSysPkg("github.com/cloudwego/abcoder")
+					isSysPkg("github.com/angrychow/abcoder")
 					isSysPkg("net/http")
 					isSysPkg("a/b/c")
 				}

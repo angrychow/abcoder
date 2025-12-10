@@ -19,7 +19,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	. "github.com/cloudwego/abcoder/lang/uniast"
+	. "github.com/angrychow/abcoder/lang/uniast"
 	"github.com/stretchr/testify/require"
 )
 

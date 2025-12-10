@@ -39,15 +39,15 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/cloudwego/abcoder/lang"
-	"github.com/cloudwego/abcoder/lang/log"
-	"github.com/cloudwego/abcoder/lang/uniast"
-	"github.com/cloudwego/abcoder/lang/utils"
-	"github.com/cloudwego/abcoder/llm"
-	"github.com/cloudwego/abcoder/llm/agent"
-	"github.com/cloudwego/abcoder/llm/mcp"
-	"github.com/cloudwego/abcoder/llm/tool"
-	"github.com/cloudwego/abcoder/version"
+	"github.com/angrychow/abcoder/lang"
+	"github.com/angrychow/abcoder/lang/log"
+	"github.com/angrychow/abcoder/lang/uniast"
+	"github.com/angrychow/abcoder/lang/utils"
+	"github.com/angrychow/abcoder/llm"
+	"github.com/angrychow/abcoder/llm/agent"
+	"github.com/angrychow/abcoder/llm/mcp"
+	"github.com/angrychow/abcoder/llm/tool"
+	"github.com/angrychow/abcoder/version"
 )
 
 const Usage = `abcoder <Action> [Language] <Path> [Flags]

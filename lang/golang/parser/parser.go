@@ -30,7 +30,7 @@ import (
 	"regexp"
 	"strings"
 
-	. "github.com/cloudwego/abcoder/lang/uniast"
+	. "github.com/angrychow/abcoder/lang/uniast"
 )
 
 //---------------- Golang Parser -----------------

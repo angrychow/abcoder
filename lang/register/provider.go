@@ -15,9 +15,9 @@
 package register
 
 import (
-	javaLsp "github.com/cloudwego/abcoder/lang/java/lsp"
-	"github.com/cloudwego/abcoder/lang/lsp"
-	"github.com/cloudwego/abcoder/lang/uniast"
+	javaLsp "github.com/angrychow/abcoder/lang/java/lsp"
+	"github.com/angrychow/abcoder/lang/lsp"
+	"github.com/angrychow/abcoder/lang/uniast"
 )
 
 func RegisterProviders() {

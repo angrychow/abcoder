@@ -19,7 +19,7 @@ package utils
 import (
 	"strings"
 
-	"github.com/cloudwego/abcoder/lang/uniast"
+	"github.com/angrychow/abcoder/lang/uniast"
 )
 
 const (

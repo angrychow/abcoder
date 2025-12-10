@@ -21,7 +21,7 @@ import (
 	"unicode/utf16"
 	"unicode/utf8"
 
-	"github.com/cloudwego/abcoder/lang/uniast"
+	"github.com/angrychow/abcoder/lang/uniast"
 	sitter "github.com/smacker/go-tree-sitter"
 	"github.com/smacker/go-tree-sitter/java"
 )

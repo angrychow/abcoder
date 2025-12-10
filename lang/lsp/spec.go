@@ -15,7 +15,7 @@
 package lsp
 
 import (
-	"github.com/cloudwego/abcoder/lang/uniast"
+	"github.com/angrychow/abcoder/lang/uniast"
 )
 
 // Detailed implementation used for collect LSP symbols and transform them to UniAST

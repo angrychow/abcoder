@@ -21,10 +21,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/cloudwego/abcoder/lang/log"
-	. "github.com/cloudwego/abcoder/lang/lsp"
-	"github.com/cloudwego/abcoder/lang/uniast"
-	"github.com/cloudwego/abcoder/lang/utils"
+	"github.com/angrychow/abcoder/lang/log"
+	. "github.com/angrychow/abcoder/lang/lsp"
+	"github.com/angrychow/abcoder/lang/uniast"
+	"github.com/angrychow/abcoder/lang/utils"
 )
 
 type dependency struct {

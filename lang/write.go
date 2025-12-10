@@ -20,8 +20,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/cloudwego/abcoder/lang/golang/writer"
-	"github.com/cloudwego/abcoder/lang/uniast"
+	"github.com/angrychow/abcoder/lang/golang/writer"
+	"github.com/angrychow/abcoder/lang/uniast"
 )
 
 // Write writes the AST to the output directory.

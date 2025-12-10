@@ -18,9 +18,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	javaparser "github.com/cloudwego/abcoder/lang/java/parser"
-	lsp "github.com/cloudwego/abcoder/lang/lsp"
-	"github.com/cloudwego/abcoder/lang/uniast"
+	javaparser "github.com/angrychow/abcoder/lang/java/parser"
+	lsp "github.com/angrychow/abcoder/lang/lsp"
+	"github.com/angrychow/abcoder/lang/uniast"
 	sitter "github.com/smacker/go-tree-sitter"
 )
 

@@ -26,9 +26,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/cloudwego/abcoder/lang/collect"
-	"github.com/cloudwego/abcoder/lang/testutils"
-	"github.com/cloudwego/abcoder/lang/uniast"
+	"github.com/angrychow/abcoder/lang/collect"
+	"github.com/angrychow/abcoder/lang/testutils"
+	"github.com/angrychow/abcoder/lang/uniast"
 	"github.com/pkg/errors"
 )
 

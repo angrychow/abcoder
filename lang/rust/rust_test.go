@@ -18,7 +18,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/cloudwego/abcoder/lang/testutils"
+	"github.com/angrychow/abcoder/lang/testutils"
 )
 
 func TestRustSpec_NameSpaceInternal(t *testing.T) {

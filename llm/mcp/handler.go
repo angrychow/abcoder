@@ -20,9 +20,9 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/cloudwego/abcoder/internal/utils"
-	"github.com/cloudwego/abcoder/llm/prompt"
-	"github.com/cloudwego/abcoder/llm/tool"
+	"github.com/angrychow/abcoder/internal/utils"
+	"github.com/angrychow/abcoder/llm/prompt"
+	"github.com/angrychow/abcoder/llm/tool"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

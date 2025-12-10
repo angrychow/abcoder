@@ -28,7 +28,7 @@ import (
 	"sync"
 
 	"github.com/Knetic/govaluate"
-	. "github.com/cloudwego/abcoder/lang/uniast"
+	. "github.com/angrychow/abcoder/lang/uniast"
 	"golang.org/x/mod/modfile"
 )
 

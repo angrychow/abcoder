@@ -18,8 +18,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudwego/abcoder/lang/log"
-	"github.com/cloudwego/abcoder/lang/testutils"
+	"github.com/angrychow/abcoder/lang/log"
+	"github.com/angrychow/abcoder/lang/testutils"
 )
 
 func TestCheckRepo(t *testing.T) {

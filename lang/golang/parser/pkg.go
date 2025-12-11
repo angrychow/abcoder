@@ -36,6 +36,12 @@ func (p *GoParser) parseImports(fset *token.FileSet, file []byte, mod *Module, i
 	ret := &importInfo{}
 	for _, imp := range impts {
 		importPath, _ := strconv.Unquote(imp.Path.Value) // remove the quotes
+
+		// Skip CGO pseudo-package "C"
+		if importPath == "C" {
+			continue
+		}
+
 		importAlias := ""
 		// Check if user has defined an alias for current import
 		if imp.Name != nil {

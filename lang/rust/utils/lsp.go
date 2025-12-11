@@ -23,8 +23,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/cloudwego/abcoder/lang/log"
-	lsp "github.com/cloudwego/abcoder/lang/lsp"
+	"github.com/angrychow/abcoder/lang/log"
+	lsp "github.com/angrychow/abcoder/lang/lsp"
 )
 
 var DefaultLSPInitTime = time.Second * 60

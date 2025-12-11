@@ -17,13 +17,13 @@ package lsp
 import (
 	"context"
 	"fmt"
-	"github.com/cloudwego/abcoder/lang/uniast"
+	"github.com/angrychow/abcoder/lang/uniast"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/cloudwego/abcoder/lang/java"
-	"github.com/cloudwego/abcoder/lang/lsp"
+	"github.com/angrychow/abcoder/lang/java"
+	"github.com/angrychow/abcoder/lang/lsp"
 	"github.com/stretchr/testify/require"
 )
 

@@ -25,8 +25,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cloudwego/abcoder/lang/log"
-	"github.com/cloudwego/abcoder/lang/uniast"
+	"github.com/angrychow/abcoder/lang/log"
+	"github.com/angrychow/abcoder/lang/uniast"
 	lsp "github.com/sourcegraph/go-lsp"
 	"github.com/sourcegraph/jsonrpc2"
 )

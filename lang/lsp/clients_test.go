@@ -22,7 +22,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/cloudwego/abcoder/lang/uniast"
+	"github.com/angrychow/abcoder/lang/uniast"
 )
 
 func checkSymNames(t *testing.T, symbols map[Range]*DocumentSymbol, expectedNames []string) {

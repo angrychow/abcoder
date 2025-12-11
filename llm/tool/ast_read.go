@@ -23,9 +23,9 @@ import (
 	"strings"
 	"sync"
 
-	abutil "github.com/cloudwego/abcoder/internal/utils"
-	"github.com/cloudwego/abcoder/lang/uniast"
-	"github.com/cloudwego/abcoder/llm/log"
+	abutil "github.com/angrychow/abcoder/internal/utils"
+	"github.com/angrychow/abcoder/lang/uniast"
+	"github.com/angrychow/abcoder/llm/log"
 	"github.com/cloudwego/eino/components/tool"
 	"github.com/cloudwego/eino/components/tool/utils"
 	"github.com/fsnotify/fsnotify"

@@ -193,7 +193,7 @@ File information, including both code and non-code files
 
     - In Rust: `use xx::yy;`
 
-    - In Golang: `"github.com/cloudwego/abcoder"`
+    - In Golang: `"github.com/angrychow/abcoder"`
 
 
 - Alias: Import alias, can be empty

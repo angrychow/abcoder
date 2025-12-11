@@ -33,8 +33,8 @@ package lsp
 import (
 	"strings"
 
-	"github.com/cloudwego/abcoder/lang/log"
-	"github.com/cloudwego/abcoder/lang/utils"
+	"github.com/angrychow/abcoder/lang/log"
+	"github.com/angrychow/abcoder/lang/utils"
 )
 
 func GetDistance(text string, start Position, pos Position) int {

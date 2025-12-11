@@ -21,9 +21,9 @@ import (
 	"path/filepath"
 	"sort"
 
-	"github.com/cloudwego/abcoder/lang/golang/writer"
-	"github.com/cloudwego/abcoder/lang/uniast"
-	"github.com/cloudwego/abcoder/lang/utils"
+	"github.com/angrychow/abcoder/lang/golang/writer"
+	"github.com/angrychow/abcoder/lang/uniast"
+	"github.com/angrychow/abcoder/lang/utils"
 )
 
 // PatchModule patches the ast Nodes onto module files

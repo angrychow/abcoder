@@ -23,7 +23,7 @@ import (
 	"strconv"
 	"strings"
 
-	. "github.com/cloudwego/abcoder/lang/uniast"
+	. "github.com/angrychow/abcoder/lang/uniast"
 )
 
 func (p *GoParser) parseFile(ctx *fileContext, f *ast.File) error {

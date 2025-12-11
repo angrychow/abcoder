@@ -25,17 +25,17 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/cloudwego/abcoder/lang/collect"
-	"github.com/cloudwego/abcoder/lang/cxx"
-	"github.com/cloudwego/abcoder/lang/golang/parser"
-	"github.com/cloudwego/abcoder/lang/java"
-	"github.com/cloudwego/abcoder/lang/log"
-	"github.com/cloudwego/abcoder/lang/lsp"
-	"github.com/cloudwego/abcoder/lang/python"
-	"github.com/cloudwego/abcoder/lang/register"
-	"github.com/cloudwego/abcoder/lang/rust"
-	"github.com/cloudwego/abcoder/lang/uniast"
-	"github.com/cloudwego/abcoder/version"
+	"github.com/angrychow/abcoder/lang/collect"
+	"github.com/angrychow/abcoder/lang/cxx"
+	"github.com/angrychow/abcoder/lang/golang/parser"
+	"github.com/angrychow/abcoder/lang/java"
+	"github.com/angrychow/abcoder/lang/log"
+	"github.com/angrychow/abcoder/lang/lsp"
+	"github.com/angrychow/abcoder/lang/python"
+	"github.com/angrychow/abcoder/lang/register"
+	"github.com/angrychow/abcoder/lang/rust"
+	"github.com/angrychow/abcoder/lang/uniast"
+	"github.com/angrychow/abcoder/version"
 )
 
 // ParseOptions is the options for parsing the repo.

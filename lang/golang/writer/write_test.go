@@ -22,8 +22,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/cloudwego/abcoder/lang/testutils"
-	"github.com/cloudwego/abcoder/lang/uniast"
+	"github.com/angrychow/abcoder/lang/testutils"
+	"github.com/angrychow/abcoder/lang/uniast"
 )
 
 func TestWriter_WriteRepo(t *testing.T) {

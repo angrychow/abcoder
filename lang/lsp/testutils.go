@@ -18,8 +18,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/cloudwego/abcoder/lang/testutils"
-	"github.com/cloudwego/abcoder/lang/uniast"
+	"github.com/angrychow/abcoder/lang/testutils"
+	"github.com/angrychow/abcoder/lang/uniast"
 )
 
 var clients = make(map[uniast.Language]*LSPClient)

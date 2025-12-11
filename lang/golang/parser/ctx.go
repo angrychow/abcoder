@@ -25,8 +25,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/cloudwego/abcoder/lang/uniast"
-	. "github.com/cloudwego/abcoder/lang/uniast"
+	"github.com/angrychow/abcoder/lang/uniast"
+	. "github.com/angrychow/abcoder/lang/uniast"
 	"golang.org/x/tools/go/packages"
 )
 

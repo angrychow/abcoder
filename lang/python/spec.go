@@ -23,9 +23,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/cloudwego/abcoder/lang/log"
-	lsp "github.com/cloudwego/abcoder/lang/lsp"
-	"github.com/cloudwego/abcoder/lang/uniast"
+	"github.com/angrychow/abcoder/lang/log"
+	lsp "github.com/angrychow/abcoder/lang/lsp"
+	"github.com/angrychow/abcoder/lang/uniast"
 )
 
 type PythonSpec struct {

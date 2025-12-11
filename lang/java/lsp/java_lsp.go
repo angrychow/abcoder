@@ -16,7 +16,7 @@ package lsp
 
 import (
 	"context"
-	"github.com/cloudwego/abcoder/lang/lsp"
+	"github.com/angrychow/abcoder/lang/lsp"
 )
 
 // JavaProvider implements the LanguageServiceProvider for Java.

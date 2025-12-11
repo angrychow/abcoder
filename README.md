@@ -30,7 +30,7 @@ see [UniAST Specification](docs/uniast-zh.md)
 1. Install ABCoder:
 
     ```bash
-    go install github.com/cloudwego/abcoder@latest
+    go install github.com/angrychow/abcoder@latest
     ```
 
 2. Use ABCoder to parse a repository to UniAST (JSON)
@@ -140,7 +140,7 @@ project, kindly check out our guide:
 
 # Contact Us
 - How to become a member: [COMMUNITY MEMBERSHIP](https://github.com/cloudwego/community/blob/main/COMMUNITY_MEMBERSHIP.md)
-- Issues: [Issues](https://github.com/cloudwego/abcoder/issues)
+- Issues: [Issues](https://github.com/angrychow/abcoder/issues)
 - Lark: Scan the QR code below with [Register Feishu](https://www.feishu.cn/en/) to join our CloudWeGo/abcoder user group.
 
 &ensp;&ensp;&ensp; <img src="images/lark_group_zh.png" alt="LarkGroup" width="200"/>
@@ -148,7 +148,7 @@ project, kindly check out our guide:
 # Contributors
 Thank you for your contribution to ABCoder!
 
-[![Contributors](https://contrib.rocks/image?repo=cloudwego/abcoder)](https://github.com/cloudwego/abcoder/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=cloudwego/abcoder)](https://github.com/angrychow/abcoder/graphs/contributors)
 
 # License
 This project is licensed under the [Apache-2.0 License](LICENSE-APACHE).

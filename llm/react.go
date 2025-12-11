@@ -19,9 +19,9 @@ package llm
 import (
 	"context"
 
-	"github.com/cloudwego/abcoder/internal/utils"
-	"github.com/cloudwego/abcoder/llm/log"
-	"github.com/cloudwego/abcoder/llm/prompt"
+	"github.com/angrychow/abcoder/internal/utils"
+	"github.com/angrychow/abcoder/llm/log"
+	"github.com/angrychow/abcoder/llm/prompt"
 	"github.com/cloudwego/eino/callbacks"
 	"github.com/cloudwego/eino/compose"
 	"github.com/cloudwego/eino/flow/agent"

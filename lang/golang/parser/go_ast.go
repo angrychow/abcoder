@@ -17,7 +17,7 @@ package parser
 import (
 	"fmt"
 
-	. "github.com/cloudwego/abcoder/lang/uniast"
+	. "github.com/angrychow/abcoder/lang/uniast"
 )
 
 func loadNode(p *GoParser, pkgPath string, name string, out *Repository) error {

@@ -27,8 +27,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cloudwego/abcoder/lang/uniast"
-	"github.com/cloudwego/abcoder/lang/utils"
+	"github.com/angrychow/abcoder/lang/uniast"
+	"github.com/angrychow/abcoder/lang/utils"
 )
 
 const (

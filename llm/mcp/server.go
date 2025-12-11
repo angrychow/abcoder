@@ -20,8 +20,8 @@ import (
 	"context"
 	"log"
 
-	alog "github.com/cloudwego/abcoder/llm/log"
-	"github.com/cloudwego/abcoder/llm/tool"
+	alog "github.com/angrychow/abcoder/llm/log"
+	"github.com/angrychow/abcoder/llm/tool"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 )

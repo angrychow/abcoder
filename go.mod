@@ -1,4 +1,4 @@
-module github.com/cloudwego/abcoder
+module github.com/angrychow/abcoder
 
 go 1.23.4
 

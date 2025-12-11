@@ -16,7 +16,7 @@ package lsp
 
 import (
 	"context"
-	"github.com/cloudwego/abcoder/lang/uniast"
+	"github.com/angrychow/abcoder/lang/uniast"
 )
 
 // LanguageServiceProvider defines methods for language-specific LSP features.
